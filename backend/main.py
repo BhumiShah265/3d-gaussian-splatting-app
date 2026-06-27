@@ -1,3 +1,4 @@
+from backend.pipeline.reconstructor import process_reconstruction
 from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks 
 from fastapi.middleware.cors import CORSMiddleware 
 from fastapi.responses import FileResponse 
@@ -27,9 +28,8 @@ async def upload_video(background_task:BackgroundTasks,file: UploadFile = File(.
         BYTE.write(file_bytes)
     
     jobs[job_id] = {"status": "queued", "progress":0}
-    def placeholder(job_id):
-        pass
-    background_task.add_task(placeholder,job_id)
+
+    background_task.add_task(process_reconstruction,job_id, file_stored, output, jobs)
 
     return {"job_id":job_id,"status":"queued"}
 
