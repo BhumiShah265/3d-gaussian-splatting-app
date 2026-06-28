@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
 import { RefreshCw, HelpCircle } from 'lucide-react';
 
-export default function Viewer3D({ jobId, onReset }) {
+export default function Viewer3D({ jobId, fileType, onReset }) {
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,7 +17,6 @@ export default function Viewer3D({ jobId, onReset }) {
         setLoading(true);
         setError(null);
 
-        // Initialize the WebGL Gaussian Splats 3D Viewer
         viewer = new GaussianSplats3D.Viewer({
           'selfContained': false,
           'useBuiltInControls': true,
@@ -27,9 +26,10 @@ export default function Viewer3D({ jobId, onReset }) {
           'cameraLookAt': [0, 0, 0],
           'halfPrecision': true, // Helps with speed on standard screens
           'integerRedraw': false,
+          'sharedMemoryForWorkers': false,
         });
 
-        const splatUrl = `/api/splat/${jobId}`;
+        const splatUrl = `/api/splat/${jobId}.${fileType || 'splat'}`;
 
         // Add the splat scene and start the render loop once loaded
         await viewer.addSplatScene(splatUrl, {
@@ -38,6 +38,11 @@ export default function Viewer3D({ jobId, onReset }) {
 
         viewer.start();
         setLoading(false);
+
+        // Force a window resize event to align the canvas width/height with container dimensions
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 150);
       } catch (err) {
         console.error("Error loading splat viewer:", err);
         setError("Error initializing 3D viewer. The file might be corrupted or server is unreachable.");
@@ -57,10 +62,10 @@ export default function Viewer3D({ jobId, onReset }) {
         }
       }
     };
-  }, [jobId]);
+  }, [jobId, fileType]);
 
   return (
-    <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+    <div className="card viewer-card">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem' }}>Interactive 3D Scene</h3>

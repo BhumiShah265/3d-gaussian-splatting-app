@@ -1,8 +1,16 @@
-from backend.pipeline.reconstructor import process_reconstruction
+if __package__:
+    from .pipeline.reconstructor import process_reconstruction
+else:
+    from pipeline.reconstructor import process_reconstruction
 from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks 
 from fastapi.middleware.cors import CORSMiddleware 
 from fastapi.responses import FileResponse 
-import os,shutil,uuid
+from pathlib import Path
+import os,uuid
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
 
 jobs = {}
 
@@ -14,8 +22,8 @@ app.add_middleware(
     allow_methods = ["*"],
     allow_headers = ["*"],
 )
-output = "/Users/unknown1/Desktop/🫡🔼/CV/backend/storage/outputs"
-upload = "/Users/unknown1/Desktop/🫡🔼/CV/backend/storage/uploads"
+output = str(BASE_DIR / "storage" / "outputs")
+upload = str(BASE_DIR / "storage" / "uploads")
 os.makedirs(upload, exist_ok=True)
 os.makedirs(output,exist_ok = True)
 
@@ -27,7 +35,7 @@ async def upload_video(background_task:BackgroundTasks,file: UploadFile = File(.
     with open(file_stored,'wb') as BYTE:
         BYTE.write(file_bytes)
     
-    jobs[job_id] = {"status": "queued", "progress":0}
+    jobs[job_id] = {"status": "queued", "progress": 0, "error": None}
 
     background_task.add_task(process_reconstruction,job_id, file_stored, output, jobs)
 
@@ -38,11 +46,16 @@ async def get_status(job_id: str):
     if job_id not in jobs:
         raise HTTPException(status_code = 404, detail="Job not found")
     else:
-        return {"status": jobs[job_id]["status"],"progress":jobs[job_id]["progress"]}
+        return {
+            "status": jobs[job_id]["status"],
+            "progress": jobs[job_id]["progress"],
+            "file_type": jobs[job_id].get("file_type", "splat"),
+            "error": jobs[job_id].get("error"),
+        }
 
-@app.get("/api/splat/{job_id}")
-async def get_splat(job_id:str):
-   splat_file= os.path.join(output,f"{job_id}.splat")
+@app.get("/api/splat/{job_id}.{ext}")
+async def get_splat(job_id:str,ext:str):
+   splat_file= os.path.join(output,f"{job_id}.{ext}")
    if os.path.exists(splat_file):
        return FileResponse(splat_file, media_type = "application/octet-stream")
    else:
