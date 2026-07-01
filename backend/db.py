@@ -5,7 +5,8 @@ DB_PATH = os.path.join(os.path.dirname(__file__),"storage","jobs.db")
 def init_db():
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
-    cur.execute("""CREATE TABLE jobs(
+    cur.execute("""CREATE TABLE IF NOT EXISTS Jobs
+    (
         job_id TEXT PRIMARY KEY,
         STATUS TEXT NOT NULL,
         PROGRESS INTEGER NOT NULL,
