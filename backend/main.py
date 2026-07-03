@@ -40,7 +40,7 @@ async def upload_video(background_task:BackgroundTasks,file: UploadFile = File(.
     with open(file_stored,'wb') as BYTE:
         BYTE.write(file_bytes)
     
-    create_job[job_id] 
+    create_job(job_id)
 
     background_task.add_task(process_reconstruction, job_id,file_stored,str(OUTPUT_DIR))
 

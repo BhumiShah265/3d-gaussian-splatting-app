@@ -135,6 +135,49 @@ export default function Dashboard({ jobId, onReset }) {
       <div className="viewer-panel">
         {jobInfo.status === 'completed' ? (
           <Viewer3D jobId={jobId} fileType={jobInfo.fileType} onReset={onReset} />
+        ) : jobInfo.status === 'failed' ? (
+          <div className="card viewer-card viewer-placeholder" style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: '1rem',
+            textAlign: 'center', 
+            width: '100%',
+            padding: '2rem'
+          }}>
+            <AlertTriangle size={42} color="var(--color-error)" />
+            <div>
+              <h3 style={{ 
+                fontFamily: 'var(--font-display)', 
+                marginBottom: '0.5rem',
+                color: 'var(--color-error)'
+              }}>
+                Processing Failed
+              </h3>
+              <p style={{ 
+                fontSize: '0.9rem', 
+                color: 'var(--text-secondary)', 
+                maxWidth: '460px', 
+                margin: '0 auto',
+                lineHeight: 1.5
+              }}>
+                {jobInfo.error || 'The reconstruction pipeline failed. Check backend logs for the exact error.'}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onReset}
+              className="browse-btn"
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.65rem 1.25rem',
+                borderRadius: '8px'
+              }}
+            >
+              Upload New Video
+            </button>
+          </div>
         ) : (
           <div className="card viewer-card viewer-placeholder" style={{ 
             display: 'flex', 
