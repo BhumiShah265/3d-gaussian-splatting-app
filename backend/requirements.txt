@@ -1,6 +1,17 @@
-fastapi
-uvicorn
-python-multipart
-opencv-python
-python-dotenv
-gradio_client
+# Core API
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Video processing
+opencv-python==4.8.1.78
+
+# Environment & utilities
+python-dotenv==1.0.0
+
+# Cloud inference
+gradio-client==0.8.0
+
+# Data processing
+numpy==1.24.3
+plyfile==0.9

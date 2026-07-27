@@ -1,0 +1,90 @@
+# ===== Python =====
+backend/.venv/
+backend/venv/
+.venv/
+venv/
+env/
+*.py[cod]
+*$py.class
+__pycache__/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+*.egg
+.coverage
+htmlcov/
+
+# ===== Backend =====
+backend/.env
+backend/storage/
+backend/*.log
+backend/jobs.db
+
+# ===== Node.js / Frontend =====
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ===== IDEs & Editors =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# ===== Environment =====
+.env
+.env.local
+.env.*.local
+.env.prod
+
+# ===== OS =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===== Logs & Debug =====
+*.log
+logs/
+*.pid
+*.seed
+
+# ===== Temporary =====
+tmp/
+temp/
+.cache/
+*.tmp
+*.bak
+*.swp
+
+# ===== Testing & Coverage =====
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# ===== IDE Artifacts =====
+*.iml
+.gradle
+.gradle/
+local.properties
