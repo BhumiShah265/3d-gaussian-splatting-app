@@ -80,7 +80,7 @@ def process_reconstruction(job_id: str, video_path: str, outputs_dir: str, jobs=
             
 
             def run_cloud_inference():
-                # 🔑 FIX: session start karna zaroori hai, warna server-side temp dir nahi banta
+                # Required: Start Gradio session for server-side temporary directory
                 logger.info("Step 3a0: Starting Gradio session...")
                 client.predict(api_name="/start_session")
 
